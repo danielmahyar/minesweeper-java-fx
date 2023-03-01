@@ -11,22 +11,37 @@ public class Field {
     private int number;
     private FieldType field_type;
     private boolean visible = false;
+    private boolean flagged = false;
+    private boolean pressed = false;
 
     public Field(FieldType field_type, Point location) {
         this.location = location;
         this.field_type = field_type;
     }
 
-    public boolean isPressable(){
-        return !isVisible();
+    public void press(){
+        pressed = true;
+    }
+
+    public boolean isPressable() {
+        return !isVisible() && !flagged && !pressed;
     }
 
     public void setFieldType(FieldType field_type) {
         this.field_type = field_type;
     }
 
+
     public void setVisible(boolean visible) {
-        this.visible = visible;
+        this.visible = this.visible || visible;
+    }
+
+    public void toggleFlagged(){
+        flagged = !flagged;
+    }
+
+    public boolean isFlagged(){
+        return this.flagged;
     }
 
     public boolean isVisible() {

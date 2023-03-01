@@ -8,8 +8,9 @@ public class GameBoardTest {
     public void testGameBoard() throws Exception {
         MineSweeperGameModel model = new MineSweeperGameModel(8, 8);
 
-        model.clickField(5, 5);
+        model.clickField(0,0);
 
+        System.out.println("Amount of bombs: " + model.getAmountOfBombs());
 
         for(Field[] fields : model.getBoard()){
             for (Field field : fields) {
@@ -26,9 +27,11 @@ public class GameBoardTest {
             System.out.println();
         }
 
+        System.out.println();
+
         for(boolean[] fields : model.getTest()){
             for (boolean field : fields) {
-                System.out.print(field ? "-" : " " + " ");
+                System.out.print(field ? "C " : "N" + " ");
             }
             System.out.println();
         }

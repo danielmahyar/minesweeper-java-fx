@@ -19,7 +19,7 @@ public class MineSweeperGameModel {
     private boolean[][] test;
 
     private GameStatus game_status = GameStatus.NOT_STARTED;
-    private int moves = 0;
+    private int moves = 0, mines_amount = 0;
     private final int x_size, y_size;
 
 
@@ -51,8 +51,14 @@ public class MineSweeperGameModel {
                     return game_status;
                 }
 
-                // else we can legally update the board
+                // Check if player has won
+                if (checkIfPlayerHasWon()) {
+                    game_status = GameStatus.WON;
+                    return game_status;
+                }
 
+                // else we can legally update the board
+                updateBoard(row, col);
 
                 moves++;
             }
@@ -66,7 +72,7 @@ public class MineSweeperGameModel {
         return GameStatus.RUNNING;
     }
 
-    private boolean firstClick(){
+    private boolean isFirstClick(){
         return moves == 0;
     }
 
@@ -78,19 +84,35 @@ public class MineSweeperGameModel {
         // Generate a board with bombs on it (updated main_board)
         generateNewBoard();
 
-        // Make sure we don't press on a bomb
+        // Make sure we don't press on a bomb on our initial click
         if (main_board[row][col].getFieldType() == FieldType.BOMB) {
             main_board[row][col].setFieldType(FieldType.EMPTY);
         }
 
+        updateBoard(row, col);
+
+        this.game_status = GameStatus.RUNNING;
+    }
+
+
+    private void updateBoard(int row, int col){
+        // Update field information
+        main_board[row][col].press();
+
 
         // All empty fields connected to the click are to be revealed
-        test = calculateConnectedCells(row, col);
+        calculateConnectedCells(row, col);
+
+        for (int x = 0; x < x_size; x++) {
+            for (int y = 0; y < y_size; y++) {
+                main_board[x][y].setVisible(test[x][y]);
+            }
+        }
 
         // When there is a bomb around a field then show number of bombs in square
         calculateBombsInArea();
-
     }
+
 
     private void calculateBombsInArea(){
         int rows = x_size;
@@ -116,7 +138,7 @@ public class MineSweeperGameModel {
 
     }
 
-    private boolean[][] calculateConnectedCells(int row, int col){
+    private void calculateConnectedCells(int row, int col){
         int numRows = x_size;
         int numCols = y_size;
         boolean[][] visited = new boolean[numRows][numCols];
@@ -142,18 +164,29 @@ public class MineSweeperGameModel {
             }
         }
 
-        return visited;
+        this.test = visited;
     }
 
-    private void updateBoard(int row, int col){
-        //
+
+    // Used to check when player has won
+    private int countCellType(FieldType search, boolean pressable){
+        int count = 0;
+        for (Field[] fields : main_board) {
+            for (Field field : fields) {
+                if(field.getFieldType() == search && field.isPressable() == pressable) {
+                    count++;
+                }
+            }
+        }
+        return count;
     }
+
 
     private void generateNewBoard() {
         int max_mines = (x_size - 1) * (y_size - 1);
         int min_mines = 10;
 
-        int mines_amount = RandomUtil.getRandomIntBetween(min_mines, max_mines);
+        mines_amount = RandomUtil.getRandomIntBetween(min_mines, max_mines);
         Point[] mine_points = RandomUtil.getRandomCoordinatesBetweenInterval(mines_amount, 0, x_size, 0, y_size);
 
         for (Point p : mine_points) {
@@ -172,6 +205,11 @@ public class MineSweeperGameModel {
         }
     }
 
+    private boolean checkIfPlayerHasWon(){
+        return (x_size * y_size) - mines_amount == countCellType(FieldType.EMPTY, false);
+    }
+
+
     private boolean inputClean(int x, int y) {
         boolean x_check = x <= MAX_SIZE && x >= MIN_SIZE;
         boolean y_check = y <= MAX_SIZE && y >= MIN_SIZE;
@@ -184,6 +222,10 @@ public class MineSweeperGameModel {
 
     public boolean[][] getTest() {
         return this.test;
+    }
+
+    public int getAmountOfBombs(){
+        return mines_amount;
     }
 
 }
