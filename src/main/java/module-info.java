@@ -8,4 +8,6 @@ module com.minesweeper {
     exports com.minesweeper;
     exports com.minesweeper.utils;
     exports com.minesweeper.models;
+    exports com.minesweeper.controllers;
+    opens com.minesweeper.controllers to javafx.fxml;
 }
