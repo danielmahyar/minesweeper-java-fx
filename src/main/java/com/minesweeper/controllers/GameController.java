@@ -28,7 +28,7 @@ public class GameController implements Initializable {
     private Pane background;
 
 
-    int x_size = 10;
+    int x_size = 12;
     int y_size = 10;
 
     int field_size = 70;

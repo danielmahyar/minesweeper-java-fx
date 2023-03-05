@@ -38,7 +38,7 @@ public class MineFieldView extends GridPane {
             for (int x = 0; x < x_size; x++) {
                 fields[y][x] = new ImageView();
                 ImageView temp = fields[y][x];
-                temp.setImage(ConstAndUtils.FIELD_CLICKABLE_IMAGE);
+                temp.setImage(ConstAndUtils.FIELD_NUMBER_EIGHT);
                 temp.setFitHeight(field_size);
                 temp.setFitWidth(field_size);
                 temp.setCursor(Cursor.HAND);
