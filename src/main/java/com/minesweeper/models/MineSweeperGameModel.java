@@ -216,8 +216,13 @@ public class MineSweeperGameModel {
         return x_check && y_check;
     }
 
-    public Field[][] getBoard(){
+    public Field[][] getBoard() {
         return this.main_board;
+    }
+
+    // TODO: Fix inverse array
+    public Field getField(int row, int col) {
+        return main_board[col][row];
     }
 
     public boolean[][] getTest() {

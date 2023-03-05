@@ -9,10 +9,12 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 
+import java.awt.*;
+
 public class MineFieldView extends GridPane {
 
     @FXML
-    private ImageView[][] fields;
+    private final ImageView[][] fields;
     private final int x_size;
     private final int y_size;
     private final int field_size;
@@ -33,22 +35,27 @@ public class MineFieldView extends GridPane {
             EventHandler<MouseEvent> field_click,
             EventHandler<MouseEvent> field_hover_entered,
             EventHandler<MouseEvent> field_hover_exit
-    ){
+    ) {
         for (int y = 0; y < y_size; y++) {
             for (int x = 0; x < x_size; x++) {
                 fields[y][x] = new ImageView();
                 ImageView temp = fields[y][x];
-                temp.setImage(ConstAndUtils.FIELD_NUMBER_EIGHT);
+                temp.setImage(ConstAndUtils.FIELD_CLICKABLE_IMAGE);
                 temp.setFitHeight(field_size);
                 temp.setFitWidth(field_size);
                 temp.setCursor(Cursor.HAND);
                 temp.setOnMouseClicked(field_click);
                 temp.setOnMouseEntered(field_hover_entered);
                 temp.setOnMouseExited(field_hover_exit);
-                temp.setId(x+""+y);
+                temp.setId(x + " " + y);
                 this.add(fields[y][x], x, y);
             }
         }
+    }
+
+
+    public void updateSpecificField(Image img, Point coord) {
+        updateSpecificField(img, (int) coord.getX(), (int) coord.getY());
     }
 
     public void updateSpecificField(Image img, int row, int col){

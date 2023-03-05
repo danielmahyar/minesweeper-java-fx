@@ -3,6 +3,10 @@ package com.minesweeper;
 import javafx.scene.image.Image;
 
 import java.net.URL;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 public class ConstAndUtils {
 
@@ -17,7 +21,6 @@ public class ConstAndUtils {
     final static public Image FIELD_NUMBER_SIX = getURLAsImage("images/100x100_field_six.png");
     final static public Image FIELD_NUMBER_SEVEN = getURLAsImage("images/100x100_field_seven.png");
     final static public Image FIELD_NUMBER_EIGHT = getURLAsImage("images/100x100_field_eight.png");
-
 
 
     private static Image getURLAsImage(String url){
